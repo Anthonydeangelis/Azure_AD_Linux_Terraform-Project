@@ -1,0 +1,1 @@
+Ensure dns is set to dc 

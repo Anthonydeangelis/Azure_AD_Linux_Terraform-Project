@@ -14,3 +14,12 @@ Usage:
 
 CI/Secrets:
 - Use GitHub Actions secrets or Azure Key Vault for CI runs.
+
+Project summary added by assistant:
+- This repository provisions an Azure lab environment with networking, Linux and Windows VMs, and Active Directory components.
+- Sensitive values (passwords, private keys) are not committed. Redacted .example files were created for files that contained potential secrets; non-sensitive files were added directly.
+- Terraform examples live under Terraform/*.example. Create Terraform/terraform.tfvars locally from the example and do NOT commit it.
+
+Security notes:
+- Rotate any credentials if they were previously committed.
+- Use GitHub Actions secrets or Azure Key Vault for CI and remote state for Terraform.
