@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars (local, not committed) and replace placeholders with real values.
+# IMPORTANT: Do NOT commit terraform.tfvars to source control.
+
+resource_group_name = "Anthony-Lab-RG"
+location            = "East US2"
+admin_username      = "azureuser"
+vm_password         = "REPLACE_WITH_SECURE_PASSWORD"
+# myip = "x.x.x.x"
