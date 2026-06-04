@@ -1,0 +1,1 @@
+az ad sp create-for-rbac --name "github-actions-netops" --role "Contributor" --scopes "/subscriptions/YOUR_SUBSCRIPTION_ID" --sdk-auth

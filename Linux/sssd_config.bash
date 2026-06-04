@@ -18,6 +18,8 @@ sudo nano /etc/sssd/sssd.conf
 #   services = nss, pam                      # Enable NSS and PAM services
 #
 # [domain/antsdomain.local]
+#   ## FIX FOR SSSD AND WINBIND ISSUES 
+#   dyndns_update = false
 #   default_shell = /bin/bash                # Default shell for AD users
 #   krb5_store_password_if_offline = True    # Cache passwords for offline use
 #   cache_credentials = True                 # Cache user credentials locally
