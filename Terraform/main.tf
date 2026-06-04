@@ -72,8 +72,24 @@ resource "azurerm_network_interface" "management_server_nic" {
     private_ip_address            = "10.0.1.4"  # Fixed IP for reliable DNS configuration
     public_ip_address_id          = azurerm_public_ip.win_pip.id  # Attach public IP for RDP access
   }
+  }
   #Adding a new RG for Storage Account for CI
   resource "azurerm_resource_group" "ci_cd_rg" {
-    name    = var.CI/CD-RG-Name  # New resource group for CI/CD storage account
+    name    = var.CICD_RG_Name  # New resource group for CI/CD storage account
     location = var.location  # Azure region (e.g., eastus, westus2)
+  }
+  resource "azurerm_storage_account" "state_sa" {
+
+  name                     = "adrstorage27272"  # Storage account name must be globally unique
+
+  resource_group_name      = azurerm_resource_group.ci_cd_rg.name  # Place storage account in CI/CD resource group
+
+  location                 = azurerm_resource_group.ci_cd_rg.location  # Same location as resource group
+
+  account_tier             = "Standard"
+
+  account_replication_type = "LRS"
+
 }
+
+

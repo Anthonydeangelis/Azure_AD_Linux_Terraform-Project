@@ -36,7 +36,7 @@ variable "admin_username" {
 variable "myip" {
   type = string
 }
-variable "CI/CD-RG-Name" {
+variable "CICD_RG_Name" {
   type = string
   default = "rg-terraform-mgmt"
 }
