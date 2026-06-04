@@ -1,0 +1,53 @@
+name: 'Terraform CI/CD Pipeline'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Terraform Action'
+    runs-all-with:
+      shell: bash
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout the repository code to the GitHub runner
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Log into Azure using the secret credentials we saved
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # 3. Install the specific version of Terraform on the runner
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.0
+
+    # 4. Initialize Terraform (connects to your Azure backend storage)
+    - name: Terraform Init
+      run: terraform init
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }} # Optional but best practice if passing individual env vars, or GitHub can parse the login state automatically.
+
+    # 5. Check formatting (Fails the build if code is messy)
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # 6. Generates a dry-run plan (Runs on Pull Requests and Pushes)
+    - name: Terraform Plan
+      run: terraform plan -input=false
+
+    # 7. Apply changes (ONLY runs when code is merged directly into the 'main' branch)
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
