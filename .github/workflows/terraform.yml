@@ -27,7 +27,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURECRED}}
 
     # 3. Install the specific version of Terraform on the runner
     - name: Setup Terraform
@@ -39,7 +39,9 @@ jobs:
     - name: Terraform Init
       run: |
         # write backend config from secret to file (keeps secrets out of repo)
-        printf '%s' "${{ secrets.TF_BACKEND_HCL }}" > backend.hcl
+        cat > backend.hcl <<EOF
+${{ secrets.TF_BACKEND_HCL }}
+EOF
         terraform init -input=false -backend-config=backend.hcl
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }} # Optional but best practice if passing individual env vars, or GitHub can parse the login state automatically.
