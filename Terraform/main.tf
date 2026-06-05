@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "lab_rg" {
     location = var.location  # Azure region (e.g., eastus, westus2)
 
     tags = {
-        Environment = "Pipineline-TestNum2"
+        Environment = "Pipineline-TestNum3"
         Project     = "AD_Linux_Projects"
     }
 }
