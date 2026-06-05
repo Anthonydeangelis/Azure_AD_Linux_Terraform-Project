@@ -19,3 +19,4 @@ backend "azurerm" {
 
 terraform init -reconfigure -backend-config="backend.hcl"
 
+Configure Yaml file
