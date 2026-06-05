@@ -1,0 +1,163 @@
+<svg width="100%" viewBox="0 0 680 820" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Azure HomeLab — Full Architecture</title>
+  <desc>Complete architecture diagram showing GitHub Actions CI/CD pipeline deploying Terraform to Azure, with a Virtual Network containing a Windows Server DC and Ubuntu Linux server, AD authentication, Samba file sharing, and security layers.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #2C2C2A; }
+    .th  { font-size: 13px; font-weight: 600; }
+    .ts  { font-size: 11px; font-weight: 400; fill: #5F5E5A; }
+    .arr { stroke: #5F5E5A; stroke-width: 1.2; fill: none; }
+    /* CI/CD - gray */
+    .ci-outer { fill: #F1EFE8; stroke: #B4B2A9; }
+    .ci-box   { fill: #D3D1C7; stroke: #888780; }
+    .ci-sec   { fill: #FAECE7; stroke: #F0997B; }
+    /* Azure blue */
+    .az-outer { fill: #E6F1FB; stroke: #85B7EB; }
+    /* NSG amber */
+    .nsg      { fill: #FAEEDA; stroke: #EF9F27; }
+    /* VNet blue inner */
+    .vnet     { fill: #B5D4F4; stroke: #378ADD; }
+    /* Mgmt purple */
+    .mgmt     { fill: #EEEDFE; stroke: #AFA9EC; }
+    .mgmt-box { fill: #CECBF6; stroke: #7F77DD; }
+    .mgmt-t   { fill: #26215C; }
+    .mgmt-s   { fill: #3C3489; }
+    /* Svc teal */
+    .svc      { fill: #E1F5EE; stroke: #5DCAA5; }
+    .svc-box  { fill: #9FE1CB; stroke: #1D9E75; }
+    .svc-t    { fill: #04342C; }
+    .svc-s    { fill: #085041; }
+    /* Amber boxes */
+    .fw-box   { fill: #FAC775; stroke: #EF9F27; }
+    .fw-t     { fill: #412402; }
+    .fw-s     { fill: #633806; }
+    /* Gray boxes */
+    .gray-box { fill: #D3D1C7; stroke: #888780; }
+  </style>
+
+  <!-- CI/CD LAYER -->
+  <rect x="20" y="16" width="640" height="84" rx="12" class="ci-outer" stroke-width="0.5"/>
+  <text class="th" x="340" y="38" text-anchor="middle">GitHub Actions — CI/CD pipeline</text>
+
+  <rect x="40" y="48" width="116" height="40" rx="8" class="ci-box" stroke-width="0.5"/>
+  <text class="th" x="98" y="64" text-anchor="middle">fmt check</text>
+  <text class="ts" x="98" y="79" text-anchor="middle">on every push</text>
+
+  <rect x="174" y="48" width="116" height="40" rx="8" class="ci-box" stroke-width="0.5"/>
+  <text class="th" x="232" y="64" text-anchor="middle">tf plan</text>
+  <text class="ts" x="232" y="79" text-anchor="middle">on pull request</text>
+
+  <rect x="308" y="48" width="116" height="40" rx="8" class="ci-box" stroke-width="0.5"/>
+  <text class="th" x="366" y="64" text-anchor="middle">tf apply</text>
+  <text class="ts" x="366" y="79" text-anchor="middle">merge to main only</text>
+
+  <rect x="442" y="48" width="200" height="40" rx="8" class="ci-sec" stroke-width="0.5"/>
+  <text class="th" x="542" y="64" text-anchor="middle" style="fill:#4A1B0C">GitHub secrets</text>
+  <text class="ts" x="542" y="79" text-anchor="middle" style="fill:#712B13">AZURECRED · TF vars</text>
+
+  <line x1="156" y1="68" x2="172" y2="68" class="arr" marker-end="url(#arrow)"/>
+  <line x1="290" y1="68" x2="306" y2="68" class="arr" marker-end="url(#arrow)"/>
+  <line x1="424" y1="68" x2="440" y2="68" class="arr" marker-end="url(#arrow)"/>
+  <line x1="366" y1="100" x2="366" y2="122" class="arr" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+  <text class="ts" x="380" y="115">Terraform deploy</text>
+
+  <!-- AZURE RESOURCE GROUP -->
+  <rect x="20" y="128" width="640" height="574" rx="14" class="az-outer" stroke-width="0.5"/>
+  <text class="th" x="340" y="150" text-anchor="middle" style="fill:#042C53">Azure resource group — antsdomain-rg</text>
+  <text class="ts" x="340" y="166" text-anchor="middle" style="fill:#185FA5">Student subscription · Terraform remote state in Azure Blob · Key Vault for secrets</text>
+
+  <!-- NSG -->
+  <rect x="40" y="176" width="600" height="40" rx="8" class="nsg" stroke-width="0.5"/>
+  <text class="th" x="340" y="193" text-anchor="middle" style="fill:#412402">Network security group</text>
+  <text class="ts" x="340" y="208" text-anchor="middle" style="fill:#633806">RDP · SSH → YOUR_HOME_IP only · SMB 445 → 10.0.1.0/24 only · all other inbound denied</text>
+
+  <!-- VNet -->
+  <rect x="40" y="226" width="600" height="456" rx="12" class="vnet" stroke-width="0.5"/>
+  <text class="th" x="340" y="248" text-anchor="middle" style="fill:#042C53">Virtual network — 10.0.0.0/16</text>
+
+  <!-- MANAGEMENT SUBNET -->
+  <rect x="58" y="260" width="268" height="400" rx="10" class="mgmt" stroke-width="0.5"/>
+  <text class="th" x="192" y="282" text-anchor="middle" class="mgmt-t" style="fill:#26215C">Management subnet</text>
+  <text class="ts" x="192" y="298" text-anchor="middle" style="fill:#3C3489">10.0.1.0/24</text>
+
+  <rect x="74" y="308" width="236" height="46" rx="8" class="mgmt-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="327" text-anchor="middle" style="fill:#26215C">win-mgmt-01</text>
+  <text class="ts" x="192" y="344" text-anchor="middle" style="fill:#3C3489">Windows Server 2022 · 10.0.1.4</text>
+
+  <rect x="74" y="366" width="236" height="46" rx="8" class="mgmt-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="385" text-anchor="middle" style="fill:#26215C">Active Directory DS</text>
+  <text class="ts" x="192" y="402" text-anchor="middle" style="fill:#3C3489">DNS · Kerberos · LDAP</text>
+
+  <rect x="74" y="424" width="236" height="46" rx="8" class="mgmt-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="443" text-anchor="middle" style="fill:#26215C">AD groups — AGDLP model</text>
+  <text class="ts" x="192" y="460" text-anchor="middle" style="fill:#3C3489">LinuxShareUsers → DL-LinuxShare-RW</text>
+
+  <rect x="74" y="482" width="236" height="46" rx="8" class="mgmt-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="501" text-anchor="middle" style="fill:#26215C">AD users (PowerShell)</text>
+  <text class="ts" x="192" y="518" text-anchor="middle" style="fill:#3C3489">anthonyadmin · jdoe · antsadmin</text>
+
+  <rect x="74" y="540" width="236" height="36" rx="8" class="gray-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="556" text-anchor="middle">Public IP</text>
+  <text class="ts" x="192" y="571" text-anchor="middle">RDP locked to home IP</text>
+
+  <rect x="74" y="588" width="236" height="36" rx="8" class="fw-box" stroke-width="0.5"/>
+  <text class="th" x="192" y="604" text-anchor="middle" style="fill:#412402">Windows firewall</text>
+  <text class="ts" x="192" y="620" text-anchor="middle" style="fill:#633806">RDP 3389 from home only</text>
+
+  <!-- SERVICES SUBNET -->
+  <rect x="354" y="260" width="268" height="400" rx="10" class="svc" stroke-width="0.5"/>
+  <text class="th" x="488" y="282" text-anchor="middle" style="fill:#04342C">Services subnet</text>
+  <text class="ts" x="488" y="298" text-anchor="middle" style="fill:#085041">10.0.2.0/24</text>
+
+  <rect x="370" y="308" width="236" height="46" rx="8" class="svc-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="327" text-anchor="middle" style="fill:#04342C">linux-srv-01</text>
+  <text class="ts" x="488" y="344" text-anchor="middle" style="fill:#085041">Ubuntu 22.04 LTS · 10.0.2.5</text>
+
+  <rect x="370" y="366" width="236" height="46" rx="8" class="svc-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="385" text-anchor="middle" style="fill:#04342C">sssd</text>
+  <text class="ts" x="488" y="402" text-anchor="middle" style="fill:#085041">AD logins · home dir creation</text>
+
+  <rect x="370" y="424" width="236" height="46" rx="8" class="svc-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="443" text-anchor="middle" style="fill:#04342C">Samba — smbd + winbind</text>
+  <text class="ts" x="488" y="460" text-anchor="middle" style="fill:#085041">\\10.0.2.5\shared · AD group auth</text>
+
+  <rect x="370" y="482" width="236" height="46" rx="8" class="svc-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="501" text-anchor="middle" style="fill:#04342C">Domain joined</text>
+  <text class="ts" x="488" y="518" text-anchor="middle" style="fill:#085041">realmd · krb5 · net ads join</text>
+
+  <rect x="370" y="540" width="236" height="36" rx="8" class="gray-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="556" text-anchor="middle">Public IP — 40.70.247.107</text>
+  <text class="ts" x="488" y="571" text-anchor="middle">SSH locked to home IP</text>
+
+  <rect x="370" y="588" width="236" height="36" rx="8" class="fw-box" stroke-width="0.5"/>
+  <text class="th" x="488" y="604" text-anchor="middle" style="fill:#412402">UFW firewall</text>
+  <text class="ts" x="488" y="620" text-anchor="middle" style="fill:#633806">22 home · 445 from 10.0.1.0/24</text>
+
+  <!-- INTER-VM ARROWS -->
+  <line x1="310" y1="389" x2="368" y2="389" stroke="#0F6E56" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+  <text class="ts" x="339" y="383" text-anchor="middle" style="fill:#0F6E56">Kerberos</text>
+
+  <line x1="310" y1="447" x2="368" y2="447" stroke="#0F6E56" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+  <text class="ts" x="339" y="441" text-anchor="middle" style="fill:#0F6E56">LDAP/SMB</text>
+
+  <line x1="310" y1="505" x2="368" y2="505" stroke="#533489" stroke-width="1" fill="none" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+  <text class="ts" x="339" y="499" text-anchor="middle" style="fill:#533489">group sync</text>
+
+  <!-- LEGEND -->
+  <rect x="40" y="672" width="10" height="10" rx="2" class="mgmt-box" stroke-width="0.5"/>
+  <text class="ts" x="56" y="681">Windows / AD</text>
+  <rect x="150" y="672" width="10" height="10" rx="2" class="svc-box" stroke-width="0.5"/>
+  <text class="ts" x="166" y="681">Linux services</text>
+  <rect x="258" y="672" width="10" height="10" rx="2" class="fw-box" stroke-width="0.5"/>
+  <text class="ts" x="274" y="681">Firewall / NSG</text>
+  <rect x="358" y="672" width="10" height="10" rx="2" class="ci-sec" stroke-width="0.5"/>
+  <text class="ts" x="374" y="681">CI/CD / secrets</text>
+  <rect x="458" y="672" width="10" height="10" rx="2" class="az-outer" stroke-width="0.5"/>
+  <text class="ts" x="474" y="681">Network / Azure</text>
+
+  <text class="ts" x="340" y="706" text-anchor="middle">Internet: SSH · RDP locked to YOUR_HOME_IP — SMB internal only — all other ports denied</text>
+</svg>
