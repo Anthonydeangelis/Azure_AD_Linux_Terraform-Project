@@ -12,8 +12,9 @@ permissions:
 jobs:
   terraform:
     name: 'Terraform Action'
-    runs-all-with:
-      shell: bash
+    defaults:
+      run:
+        shell: bash
     runs-on: ubuntu-latest
 
     steps:
