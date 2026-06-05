@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "lab_rg" {
 
     tags = {
         Environment = "Pipineline-TestNum2"
-        Project     = "AD_Linux_Project"
+        Project     = "AD_Linux_Projects"
     }
 }
 
