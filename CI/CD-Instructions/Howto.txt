@@ -9,3 +9,13 @@ Store the credentials from prev command in github secrets
   "tenantId": "xxxx-xxxx-xxxx"
 }
 
+Migrate state file to sa
+backend "azurerm" {
+    resource_group_name  = "rg-netops-mgmt"
+    storage_account_name = "netopstfstate2026"  # <-- Double check your exact SA name here
+    container_name       = "tfstate"
+    key                  = "hub-spoke-net.tfstate"
+  }
+
+terraform init -reconfigure -backend-config="backend.hcl"
+
