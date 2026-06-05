@@ -2,6 +2,7 @@
 
 A fully automated, Infrastructure-as-Code Azure homelab simulating a real corporate network environment. Built to develop hands-on skills in cloud networking, Active Directory administration, Linux systems management, and DevOps practices.
 
+![Network Diagram](architecture.svg)
 ---
 
 ## Project Overview
