@@ -34,9 +34,7 @@ jobs:
 
     - name: Terraform Init
       run: |
-        cat > backend.hcl <<EOF
-${{ secrets.TF_BACKEND_HCL }}
-EOF
+        echo "${{ secrets.TF_BACKEND_HCL }}" > backend.hcl
         terraform init -input=false -backend-config=backend.hcl
       env:
         ARM_CLIENT_ID: ${{ fromJson(secrets.AZURECRED).clientId }}
@@ -52,4 +50,14 @@ EOF
       env:
         ARM_CLIENT_ID: ${{ fromJson(secrets.AZURECRED).clientId }}
         ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURECRED).clientSecret }}
-        A
+        ARM_TENANT_ID: ${{ fromJson(secrets.AZURECRED).tenantId }}
+        ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURECRED).subscriptionId }}
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+      env:
+        ARM_CLIENT_ID: ${{ fromJson(secrets.AZURECRED).clientId }}
+        ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURECRED).clientSecret }}
+        ARM_TENANT_ID: ${{ fromJson(secrets.AZURECRED).tenantId }}
+        ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURECRED).subscriptionId }}
