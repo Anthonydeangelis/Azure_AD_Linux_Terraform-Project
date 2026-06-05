@@ -12,7 +12,7 @@ This project provisions and configures a segmented Azure virtual network contain
 
 ## Architecture
 
-<img src="architecture.svg" alt="Architecture Diagram" width="100%"/>
+<img src="architecture.png" alt="Architecture Diagram" width="100%"/>
 
 ```
 Azure Resource Group — antsdomain-rg
