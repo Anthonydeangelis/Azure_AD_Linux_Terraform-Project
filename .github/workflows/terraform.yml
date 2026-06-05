@@ -34,8 +34,11 @@ jobs:
 
     - name: Terraform Init
       run: |
-        echo "${{ secrets.TF_BACKEND_HCL }}" > backend.hcl
-        terraform init -input=false -backend-config=backend.hcl
+        terraform init -input=false \
+          -backend-config="resource_group_name=${{ secrets.TF_RG }}" \
+          -backend-config="storage_account_name=${{ secrets.TF_STORAGE }}" \
+          -backend-config="container_name=${{ secrets.TF_CONTAINER }}" \
+          -backend-config="key=${{ secrets.TF_KEY }}"
       env:
         ARM_CLIENT_ID: ${{ fromJson(secrets.AZURECRED).clientId }}
         ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURECRED).clientSecret }}
