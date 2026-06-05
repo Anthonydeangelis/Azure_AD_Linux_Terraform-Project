@@ -91,5 +91,9 @@ resource "azurerm_network_interface" "management_server_nic" {
   account_replication_type = "LRS"
 
 }
-
+resource "azurerm_storage_container" "new_container" {
+  name                  = "my-new-container" # The name you want for the container in Azure
+  storage_account_name  = azurerm_storage_account.state_sa.name      # Put your EXACT existing storage account name here
+  container_access_type = "private"                # Keeps it secure and private
+}
 
