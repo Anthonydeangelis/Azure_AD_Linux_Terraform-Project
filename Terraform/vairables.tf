@@ -19,24 +19,24 @@ variable "vnet_address_space" {
 variable "subnets" {
   description = "A map of subnet names and their prefixes"
   type        = map(string)
-  default     = {
-    "management"  = "10.0.1.0/24"
-    "services"  = "10.0.2.0/24"
+  default = {
+    "management" = "10.0.1.0/24"
+    "services"   = "10.0.2.0/24"
   }
 }
 variable "vm_password" {
-  type        = string
-  sensitive   = true # This hides the password from your terminal logs
+  type      = string
+  sensitive = true # This hides the password from your terminal logs
 }
 variable "admin_username" {
-  type        = string
-  sensitive   = true # This hides the password from your terminal logs
+  type      = string
+  sensitive = true # This hides the password from your terminal logs
 }
 
 variable "myip" {
   type = string
 }
 variable "CICD_RG_Name" {
-  type = string
+  type    = string
   default = "rg-terraform-mgmt"
 }
