@@ -9,7 +9,7 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
+backend.hcl
 # Provider binaries
 darwin_arm64/
 linux_amd64/

@@ -1,0 +1,11 @@
+Ensure you have a seperate rg for the sa 
+Create github actions service principal to run the automation. 
+az ad sp create-for-rbac --name "github-actions-netops" --role "Contributor" --scopes "/subscriptions/YOUR_SUBSCRIPTION_ID" --sdk-auth
+Store the credentials from prev command in github secrets 
+{
+  "clientId": "xxxx-xxxx-xxxx",
+  "clientSecret": "xxxx-xxxx-xxxx",
+  "subscriptionId": "xxxx-xxxx-xxxx",
+  "tenantId": "xxxx-xxxx-xxxx"
+}
+
