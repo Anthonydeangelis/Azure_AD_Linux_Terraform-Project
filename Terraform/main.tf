@@ -7,6 +7,11 @@
 resource "azurerm_resource_group" "lab_rg" {
     name     = var.resource_group_name  # Name from terraform.tfvars
     location = var.location  # Azure region (e.g., eastus, westus2)
+
+    tags = {
+        Environment = "Pipineline-Test"
+        Project     = "AD_Linux_Project"
+    }
 }
 
 # 2. Virtual Network - Private network space
